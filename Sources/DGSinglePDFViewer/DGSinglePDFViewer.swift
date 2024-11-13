@@ -115,3 +115,35 @@ public func dividePDFPerPage(pdfFileURL: URL) -> [URL] {
     // 각 페이지의 파일 URL 배열을 반환합니다.
     return pageURLs
 }
+
+private struct DGSinglePDFViewerPreview: View {
+    
+    @State var urls: [URL] = []
+    
+    var body: some View {
+        TabView {
+            ForEach(urls, id: \.self) { url in
+                DGSinglePDFViewer(url: url)
+                    .frame(height: 450)
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                    .padding(.horizontal, 30)
+            }
+        }
+        .background {
+            Color(uiColor: .secondarySystemBackground)
+                .ignoresSafeArea()
+        }
+        .frame(height: 500)
+        .tabViewStyle(.page(indexDisplayMode: .never))
+        .onAppear {
+            if let url = Bundle.module.url(forResource: "sample_pdf", withExtension: "pdf") {
+                self.urls = dividePDFPerPage(pdfFileURL: url)
+            }
+        }
+    }
+}
+
+#Preview {
+    DGSinglePDFViewerPreview()
+        .preferredColorScheme(.dark)
+}
