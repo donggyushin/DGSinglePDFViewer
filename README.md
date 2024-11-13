@@ -2,6 +2,11 @@
 
 Have you ever wanted to show PDF files without any space? You can easily implement them on a SwiftUI basis with the DGSinglePDFViewer.
 
+<div>
+   <img src="https://raw.githubusercontent.com/donggyushin/DGSinglePDFViewer/refs/heads/develop/screenshots/1.png" width=250 />
+   <img src="https://raw.githubusercontent.com/donggyushin/DGSinglePDFViewer/refs/heads/develop/screenshots/2.png" width=250 />
+</div>
+
 ## Installation
 
 ### Swift Package Manager
