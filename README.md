@@ -17,7 +17,7 @@ Once you have your Swift package set up, adding `DGSinglePDFViewer` as a depende
 
 ```
 dependencies: [
-   .package(url: "https://github.com/donggyushin/DGSinglePDFViewer.git", .upToNextMajor(from: "1.0.0"))
+   .package(url: "https://github.com/donggyushin/DGSinglePDFViewer.git", .upToNextMajor(from: "1.0.1"))
 ]
 ```
 

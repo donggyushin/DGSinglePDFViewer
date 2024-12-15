@@ -33,7 +33,9 @@ public struct DGSinglePDFViewer: UIViewRepresentable {
     }
     
     public func updateUIView(_ uiView: SinglePDFView, context: Context) {
-        uiView.pdfView.subviews.first?.backgroundColor = backgroundColor
+        if uiView.pdfView.subviews.first?.backgroundColor != backgroundColor {
+            uiView.pdfView.subviews.first?.backgroundColor = backgroundColor
+        }
     }
 }
 
