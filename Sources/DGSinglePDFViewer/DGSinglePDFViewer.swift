@@ -67,7 +67,6 @@ public class SinglePDFView: UIView {
         
         subviews.filter { $0 == pdfView }.forEach { $0.removeFromSuperview() }
         
-        pdfView.document = PDFDocument(url: pdfURL)
         pdfView.autoScales = true
         
         addSubview(pdfView)
@@ -76,6 +75,16 @@ public class SinglePDFView: UIView {
         pdfView.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
         pdfView.widthAnchor.constraint(equalToConstant: frame.width + horizontalEnlargement).isActive = true
         pdfView.heightAnchor.constraint(equalToConstant: frame.height + verticalEnlargement).isActive = true
+        
+        DispatchQueue.global().async { [weak self] in
+            guard let self else { return }
+            
+            let document = PDFDocument(url: pdfURL)
+            
+            DispatchQueue.main.async {
+                self.pdfView.document = document
+            }
+        }
     }
 }
 
