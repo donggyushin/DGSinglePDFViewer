@@ -93,7 +93,7 @@ public func dividePDFPerPage(pdfFileURL: URL) -> [URL] {
     // PDF 파일을 로드합니다.
     guard let originalPDF = PDFDocument(url: pdfFileURL) else {
         print("PDF 파일을 로드하지 못했습니다.")
-        return []
+        return [pdfFileURL]
     }
     
     // 결과 URL을 담을 배열을 초기화합니다.
@@ -102,29 +102,33 @@ public func dividePDFPerPage(pdfFileURL: URL) -> [URL] {
     // 원본 PDF의 페이지 수를 확인합니다.
     let totalPageCount = originalPDF.pageCount
     
-    // 페이지를 개별적으로 추출하여 저장합니다.
-    for pageIndex in 0..<totalPageCount {
-        // 새 PDFDocument 객체를 생성하여 해당 페이지를 추가합니다.
-        let newPDFDocument = PDFDocument()
-        if let page = originalPDF.page(at: pageIndex) {
-            newPDFDocument.insert(page, at: 0)
+    if totalPageCount > 1 {
+        // 페이지를 개별적으로 추출하여 저장합니다.
+        for pageIndex in 0..<totalPageCount {
+            // 새 PDFDocument 객체를 생성하여 해당 페이지를 추가합니다.
+            let newPDFDocument = PDFDocument()
+            if let page = originalPDF.page(at: pageIndex) {
+                newPDFDocument.insert(page, at: 0)
+            }
+            
+            // 각 페이지별로 저장할 파일 URL을 생성합니다.
+            let outputFileName = "\(pdfFileURL.deletingPathExtension().lastPathComponent)_Page_\(pageIndex + 1).pdf"
+            let outputURL = pdfFileURL.deletingLastPathComponent().appendingPathComponent(outputFileName)
+            
+            // 새 PDF 파일을 페이지별로 저장합니다.
+            if newPDFDocument.write(to: outputURL) {
+                // 성공적으로 저장된 경우, 해당 URL을 배열에 추가합니다.
+                pageURLs.append(outputURL)
+            } else {
+                print("페이지 \(pageIndex + 1)을 저장하는 데 실패했습니다.")
+            }
         }
         
-        // 각 페이지별로 저장할 파일 URL을 생성합니다.
-        let outputFileName = "\(pdfFileURL.deletingPathExtension().lastPathComponent)_Page_\(pageIndex + 1).pdf"
-        let outputURL = pdfFileURL.deletingLastPathComponent().appendingPathComponent(outputFileName)
-        
-        // 새 PDF 파일을 페이지별로 저장합니다.
-        if newPDFDocument.write(to: outputURL) {
-            // 성공적으로 저장된 경우, 해당 URL을 배열에 추가합니다.
-            pageURLs.append(outputURL)
-        } else {
-            print("페이지 \(pageIndex + 1)을 저장하는 데 실패했습니다.")
-        }
+        // 각 페이지의 파일 URL 배열을 반환합니다.
+        return pageURLs
+    } else {
+        return [pdfFileURL]
     }
-    
-    // 각 페이지의 파일 URL 배열을 반환합니다.
-    return pageURLs
 }
 
 private struct DGSinglePDFViewerPreview: View {
