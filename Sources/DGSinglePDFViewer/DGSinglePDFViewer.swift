@@ -115,9 +115,9 @@ public func dividePDFPerPage(pdfFileURL: URL) -> [URL] {
             let outputFileName = "\(pdfFileURL.deletingPathExtension().lastPathComponent)_Page_\(pageIndex + 1).pdf"
             let outputURL = pdfFileURL.deletingLastPathComponent().appendingPathComponent(outputFileName)
             
-            // 새 PDF 파일을 페이지별로 저장합니다.
-            if newPDFDocument.write(to: outputURL) {
-                // 성공적으로 저장된 경우, 해당 URL을 배열에 추가합니다.
+            if FileManager.default.fileExists(atPath: outputURL.path()) {
+                pageURLs.append(outputURL)
+            } else if newPDFDocument.write(to: outputURL) {
                 pageURLs.append(outputURL)
             } else {
                 print("페이지 \(pageIndex + 1)을 저장하는 데 실패했습니다.")
