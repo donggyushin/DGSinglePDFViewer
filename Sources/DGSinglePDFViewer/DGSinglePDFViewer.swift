@@ -60,10 +60,13 @@ public class SinglePDFView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    private var hasLayout = false
     public override func layoutSubviews() {
         super.layoutSubviews()
         guard frame.size.width > 0 else { return }
         guard frame.size.height > 0 else { return }
+        guard hasLayout == false else { return }
+        hasLayout = true
         
         subviews.filter { $0 == pdfView }.forEach { $0.removeFromSuperview() }
         
